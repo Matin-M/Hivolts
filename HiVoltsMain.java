@@ -23,7 +23,6 @@ public class HiVoltsMain extends Canvas {
 	
 	public void init() {
 		setSize(1900,1000);
-		//setTitle("American flag");
 		setBackground(Color.white);
 		repaint();
 	}
