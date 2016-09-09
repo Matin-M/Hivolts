@@ -11,7 +11,8 @@ public class Mho{
 		y = randRange();
 		boolean loopVar = true;
 		while(loopVar){
-			if(x == 0  x  ){
+			
+			if(x == 0 <Use or operators for this part(||)> ){
 				
 			}
 		}
