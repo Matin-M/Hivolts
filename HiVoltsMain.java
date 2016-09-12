@@ -1,38 +1,61 @@
 import java.awt.*;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
-public class HiVoltsMain extends Canvas {
+public class HiVoltsMain extends JPanel {
 	
+	static JFrame frame;
 
 	public static void main(String[] args) {
-		JFrame frame = new JFrame();
+		frame = new JFrame("HiVolts");
+		frame.setSize(1200, 1200);
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-		Canvas canvas = new HiVoltsMain();
-		canvas.setSize(1000,1900);
-		frame.getContentPane().add(canvas);
-		frame.pack();
 		frame.setVisible(true);
+		frame.add(new HiVoltsMain());
+		//frame.pack();
+		
+	}
+	public HiVoltsMain(){
+		setLayout(new GridLayout(12,12));
 	}
 	
-
-	public HiVoltsMain() {
-		init();	
+	
+	public void Mhos(){
+		Mho test = new Mho(123,1233);
+		add(test.paintMho());
+		
 	}
 	
 	
-	public void init() {
-		setSize(1900,1000);
-		setBackground(Color.white);
-		repaint();
-	}
-	
-
-	/** Paint Method
-	 * @param g - object of the graphics package
+	/**Make a Grid for testing
+	 * 
+	 * @param g - Object of the graphics package
 	 */
-	public void paint(Graphics g) {
+	public void Grid(Graphics g){
+		int lineX = getWidth()/12;
+		int lineY = getHeight()/12;
+		
+		int xmod = lineX;
+		for(int i = 1; i <= 12; i++){
+			g.drawLine(xmod, 0, xmod, getHeight());
+			xmod += lineX; 
+		}
+		
+		int ymod = lineY;
+		for(int i = 1; i <= 12; i++){
+			g.drawLine(0, ymod, getWidth(), ymod);
+			ymod += lineY; 
+		}
+	}
 	
+	/** Paint Method
+	 * @param g - Object of the graphics package
+	 */
+	@Override
+	public void paint(Graphics g) {
+		Grid(g);
+		Mhos();
+		
 	}
 	
 }
