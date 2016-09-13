@@ -23,8 +23,11 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		frame.pack();
 		frame.setVisible(true);
 		
+		File save = new File("game-field.txt");
+		String path = save.getAbsolutePath();
 		
-		File gameField = new File("C:\\Users\\Ivo\\workspace\\Hivolts\\game-field.txt");
+	//	File gameField = new File("C:\\Users\\Ivo\\workspace\\Hivolts\\game-field.txt");
+		File gameField = new File(path);
 		Iterator<String> fieldLinesIt = Files.lines(gameField.toPath()).iterator();
 		while (fieldLinesIt.hasNext()) {
 			String fieldLine = fieldLinesIt.next();
