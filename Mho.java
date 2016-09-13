@@ -1,21 +1,52 @@
 import java.awt.Canvas;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-public class Mho{
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class Mho extends Obstacles{
 	//Private data fields
 	private int x;
 	private int y;
 	
-	//Main constructor
 	public Mho(){
-		x = randRange();
-		y = randRange();
+		
+	}
+	//Main constructor
+	//Constructor formal parameters may vary depending on specifications. 
+	public Mho(int width, int height){
+		this.x = randRange();
+		this.y = randRange();
+		
+		//This is to ensure that none of the mohos land on the outer fencing
 		boolean loopVar = true;
 		while(loopVar){
-			
-			if(x == 0 <Use or operators for this part(||)> ){
-				
+			if((x == 0) || (y == 0) || (x == width) || (y == height)){
+				this.x = randRange();
+				this.y = randRange();
+				loopVar = false;
 			}
 		}
+	}
+	/**
+	 * paint Mhos individual when called 
+	 * @param g - Object of Graphics package
+	 */
+	public JLabel paintMho(){
+		System.out.print("got");
+		
+		File file = new File("sad.png");
+		final String path = file.getAbsolutePath();
+		ImageIcon icon = new ImageIcon(path);
+		JLabel label = new JLabel("Image and Text", icon, JLabel.CENTER);
+
+		return label;
 	}
 	
 	/**
