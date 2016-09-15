@@ -21,42 +21,35 @@ public class Mho extends Obstacles{
 	//Main constructor
 	//Constructor formal parameters may vary depending on specifications. 
 	public Mho(int width, int height){
-		this.x = randRange();
-		this.y = randRange();
 		
-		//This is to ensure that none of the mohos land on the outer fencing
-		boolean loopVar = true;
-		while(loopVar){
-			if((x == 0) || (y == 0) || (x == width) || (y == height)){
-				this.x = randRange();
-				this.y = randRange();
-				loopVar = false;
-			}
-		}
 	}
 	/**
 	 * paint Mhos individual when called 
 	 * @param g - Object of Graphics package
 	 */
-	public JLabel paintMho(){
-		System.out.print("got");
-		
-		File file = new File("sad.png");
-		final String path = file.getAbsolutePath();
-		ImageIcon icon = new ImageIcon(path);
-		JLabel label = new JLabel("Image and Text", icon, JLabel.CENTER);
-
-		return label;
+	
+	public BufferedImage imageMaker(String fileName){
+		//Name of the file in workspace
+		File image = new File(fileName);
+		String path = image.getAbsolutePath();
+		BufferedImage img = null;
+		 try {
+             img = ImageIO.read(new File(path));
+         } catch (IOException e) {
+        	 System.out.println("Oops! There was an error: " + e);
+         }
+		 return img; 
 	}
 	
 	/**
 	 * Randomize location for the Mhos
 	 * @return
 	 */
+	/*
 	public int randRange(){
 		return 12+(int)(Math.random()*12);
 	}
-	
+	*/
 	
 	//Getters and setters
 	public int getX() {
