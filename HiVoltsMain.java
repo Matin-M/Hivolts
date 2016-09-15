@@ -66,14 +66,17 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 			FencePositions[br][1]=freeerSpaces.get(RNGHelper)[1];
 			freeerSpaces.remove(RNGHelper);
 		}
+		
 		for(int br=0;br<12;br++){
 			System.out.println(MhoPositions[br][0]+", "+MhoPositions[br][1]);
+			Matrix[MhoPositions[br][0]][MhoPositions[br][1]]=new Mho();
 		}
 		System.out.println();
 		for(int br=0;br<20;br++){
 			System.out.println(FencePositions[br][0]+", "+FencePositions[br][1]);
+			Matrix[FencePositions[br][0]][FencePositions[br][1]]=new Fence();
 		}
-
+		
 	}
 	
 
