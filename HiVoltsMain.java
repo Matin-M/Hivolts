@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -15,7 +17,28 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+	private Thread keyListener=new Thread(){
+
+		HashSet<Integer> acceptedButtons =
+				new HashSet<Integer>(Arrays.asList(81, 87, 69, 65, 83, 68, 90, 88, 67));
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			while(true){
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(acceptedButtons.contains(keyBla)){
+					repaint();
+				}
+			}
+
+		}
+	};
+
 	public static ArrayList<int[]> freeSpacefinder(ArrayList<int[]> freeerSpaces){
 		for(int br=1;br<=10;br++){
 			for(int br1=1;br1<=10;br1++){
@@ -28,37 +51,27 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		return freeerSpaces;
 	}
 	public static int RNGesus(int randsize){
-		return (int)(1+Math.random()*randsize);
+		return (int)(1+Math.random()*(randsize-1));
 	}
 	
 	public static void main(String[] args) throws Exception {
-		final int xRes = 600;
-		final int yRes = 600;
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 		Canvas canvas = new HiVoltsMain();
-		canvas.setSize(xRes, yRes);
+		canvas.setSize(1000,1900);
 		frame.getContentPane().add(canvas);
-		frame.setPreferredSize(new Dimension(xRes, yRes));
-		frame.setSize(xRes, yRes);
 		frame.pack();
 		frame.setVisible(true);
 		
 		
-		//Redo try catch
-		try{
-			File save = new File("game-field.txt");
-			String path = save.getAbsolutePath();
-			File gameField = new File(path);
-			Iterator<String> fieldLinesIt = Files.lines(gameField.toPath()).iterator();
-			while (fieldLinesIt.hasNext()) {
-				String fieldLine = fieldLinesIt.next();
-				// initialize game matrix
-				System.out.println(fieldLine);
-			}
-		}catch(Exception e){
-			System.err.println("The game file was not located! Specific Error: " + e.getMessage());
+		File gameField = new File("C:\\Users\\Ivo\\workspace\\Hivolts\\game-field.txt");
+		Iterator<String> fieldLinesIt = Files.lines(gameField.toPath()).iterator();
+		while (fieldLinesIt.hasNext()) {
+			String fieldLine = fieldLinesIt.next();
+			// initialize game matrix
+			System.out.println(fieldLine);
 		}
+
 		
 		Obstacles[][] Matrix = new Obstacles[12][12];
 //		ArrayList[][] freeSpaces= new ArrayList[10][10];
@@ -88,68 +101,19 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 			System.out.println(FencePositions[br][0]+", "+FencePositions[br][1]);
 			Matrix[FencePositions[br][0]][FencePositions[br][1]]=new Fence();
 		}
-		for(int i = 0; i < 12; i++){
-			for(int x = 0; x < 12; x++){
-				if(Matrix[i][x] instanceof Fence){
-					
-				}else if(){
-					
-				}else if(){
-					
-				}
-			}
-		}
-		
 	}
 	
-	public void 
-	
+
 	public HiVoltsMain() {
+		keyListener.start();
 		init();	
 	}
 	
 	
 	public void init() {
+		setSize(1900,1000);
 		setBackground(Color.white);
 		repaint();
-	}
-	
-	
-	
-	//Test Mhos
-	public void pMho(Graphics g){
-		Mho test = new Mho();
-		System.out.println(getWidth()+" "+getHeight());
-		g.drawImage(test.imageMaker(), 162, 162, getWidth()/12, getHeight()/12, null);
-	}
-	
-	public void outerFence(Graphics g){
-		Fence outer = new Fence();
-		int lineX = getWidth()/12;
-		int lineY = getHeight()/12;
-		int xmod = 0;
-		for(int i = 1; i <= 12; i++){
-			g.drawImage(outer.imageMaker(), xmod, 0, getWidth()/12, getHeight()/12, null);
-			xmod += lineX; 
-		}
-		
-	}
-	
-	public void paintGrid(Graphics g){
-		//Paint a grid
-		int lineX = getWidth()/12;
-		int lineY = getHeight()/12;
-		int xmod = lineX;
-		for(int i = 1; i <= 12; i++){
-			g.drawLine(xmod, 0, xmod, getHeight());
-			xmod += lineX; 
-		}
-
-		int ymod = lineY;
-		for(int i = 1; i <= 12; i++){
-			g.drawLine(0, ymod, getWidth(), ymod);
-			ymod += lineY; 
-		}
 	}
 	
 
@@ -158,19 +122,14 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	 * @param g - object of the graphics package
 	 */
 	public void paint(Graphics g) {
-		pMho(g);
-		outerFence(g);
-		paintGrid(g);
-		
 		this.addKeyListener(this);
-//		System.out.println(keyBla);
+		System.out.println(keyBla);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		repaint();
 	}
 
 
