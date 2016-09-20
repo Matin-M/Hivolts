@@ -54,27 +54,8 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		return (int)(1+Math.random()*(randsize-1));
 	}
 	
-	public static void main(String[] args) throws Exception {
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-		Canvas canvas = new HiVoltsMain();
-		canvas.setSize(1000,1900);
-		frame.getContentPane().add(canvas);
-		frame.pack();
-		frame.setVisible(true);
-		
-		
-		File gameField = new File("C:\\Users\\Ivo\\workspace\\Hivolts\\game-field.txt");
-		Iterator<String> fieldLinesIt = Files.lines(gameField.toPath()).iterator();
-		while (fieldLinesIt.hasNext()) {
-			String fieldLine = fieldLinesIt.next();
-			// initialize game matrix
-			System.out.println(fieldLine);
-		}
-
-		
-		Obstacles[][] Matrix = new Obstacles[12][12];
-//		ArrayList[][] freeSpaces= new ArrayList[10][10];
+	static Obstacles[][] Matrix = new Obstacles[12][12];
+	public static void Randomiser(){
 		ArrayList<int[]> freeerSpaces= new ArrayList<int[]>();
 		freeerSpaces=freeSpacefinder(freeerSpaces);
 		int[][]MhoPositions=new int[12][2];
@@ -101,6 +82,28 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 			System.out.println(FencePositions[br][0]+", "+FencePositions[br][1]);
 			Matrix[FencePositions[br][0]][FencePositions[br][1]]=new Fence();
 		}
+
+	}
+
+	public static void main(String[] args) throws Exception {
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+		Canvas canvas = new HiVoltsMain();
+		canvas.setSize(1000,1900);
+		frame.getContentPane().add(canvas);
+		frame.pack();
+		frame.setVisible(true);
+		
+		
+		File gameField = new File("C:\\Users\\Ivo\\workspace\\Hivolts\\game-field.txt");
+		Iterator<String> fieldLinesIt = Files.lines(gameField.toPath()).iterator();
+		while (fieldLinesIt.hasNext()) {
+			String fieldLine = fieldLinesIt.next();
+			// initialize game matrix
+			System.out.println(fieldLine);
+		}
+//		ArrayList[][] freeSpaces= new ArrayList[10][10];
+		Randomiser();
 	}
 	
 
@@ -116,6 +119,34 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		repaint();
 	}
 	
+	public static void outerFence(Graphics g){
+		Fence outer = new Fence();
+		for(int i = 0; i <= 11; i++){
+			Matrix[i][0]=new Fence();
+			Matrix[0][i]=new Fence();
+			Matrix[i][11]=new Fence();
+			Matrix[11][i]=new Fence();
+		}
+		
+	}
+	
+	public void paintGrid(Graphics g){
+		//Paint a grid
+		int lineX = getWidth()/12;
+		int lineY = getHeight()/12;
+		int xmod = lineX;
+		for(int i = 1; i <= 12; i++){
+			g.drawLine(xmod, 0, xmod, getHeight());
+			xmod += lineX; 
+		}
+
+		int ymod = lineY;
+		for(int i = 1; i <= 12; i++){
+			g.drawLine(0, ymod, getWidth(), ymod);
+			ymod += lineY; 
+		}
+	}
+
 
 	int keyBla;
 	/** Paint Method
@@ -123,6 +154,9 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	 */
 	public void paint(Graphics g) {
 		this.addKeyListener(this);
+		paintGrid(g);
+		outerFence(g);
+		
 		System.out.println(keyBla);
 		try {
 			Thread.sleep(100);
