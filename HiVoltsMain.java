@@ -89,12 +89,12 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 		Canvas canvas = new HiVoltsMain();
-		canvas.setSize(1000,1900);
+		canvas.setSize(1000,1000);
 		frame.getContentPane().add(canvas);
 		frame.pack();
 		frame.setVisible(true);
 		
-		
+		/*
 		File gameField = new File("C:\\Users\\Ivo\\workspace\\Hivolts\\game-field.txt");
 		Iterator<String> fieldLinesIt = Files.lines(gameField.toPath()).iterator();
 		while (fieldLinesIt.hasNext()) {
@@ -103,6 +103,8 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 			System.out.println(fieldLine);
 		}
 //		ArrayList[][] freeSpaces= new ArrayList[10][10];
+ * */
+
 		Randomiser();
 	}
 	
@@ -114,9 +116,24 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	
 	
 	public void init() {
-		setSize(1900,1000);
+		setSize(1000,1000);
 		setBackground(Color.white);
 		repaint();
+	}
+	public void paintAll(Graphics g){
+		for(int i = 0; i < 12; i++){
+			for(int n = 0; n < 12; n++){
+				System.out.println(n+"  "+i);
+				if(Matrix[i][n] instanceof Fence){
+					g.drawImage(Matrix[i][n].imageMaker(), getWidth()/12*i, getHeight()/12*n, getWidth()/12, getHeight()/12, null);
+					System.out.println("fence excecuted");
+				}else if(Matrix[i][n] instanceof Mho){
+					g.drawImage(Matrix[i][n].imageMaker(), getWidth()/12*i, getHeight()/12*n, getWidth()/12, getHeight()/12, null);
+					System.out.println("mho excecuted");
+				}
+			}
+		}
+		
 	}
 	
 	public static void outerFence(Graphics g){
@@ -156,7 +173,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		this.addKeyListener(this);
 		paintGrid(g);
 		outerFence(g);
-		
+		paintAll(g);
 		System.out.println(keyBla);
 		try {
 			Thread.sleep(100);
