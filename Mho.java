@@ -28,11 +28,13 @@ public class Mho extends Obstacles{
 	 * @param g - Object of Graphics package
 	 */
 	
-	public BufferedImage imageMaker(String fileName){
+	@Override
+	public BufferedImage imageMaker(){
 		//Name of the file in workspace
-		File image = new File(fileName);
+		File image = new File("mho.png");
 		String path = image.getAbsolutePath();
 		BufferedImage img = null;
+		
 		 try {
              img = ImageIO.read(new File(path));
          } catch (IOException e) {
