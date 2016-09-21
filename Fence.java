@@ -28,6 +28,7 @@ public class Fence extends Obstacles{
 	 * @param g - Object of Graphics package
 	 */
 	
+	@Override
 	public BufferedImage imageMaker(){
 		//Name of the file in workspace
 		File image = new File("California.PNG");
