@@ -16,6 +16,8 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	/**
 	 * 
 	 */
+	public static int PX=0;
+	public static int PY=0;
 	private static final long serialVersionUID = 1L;
 	private Thread keyListener=new Thread(){
 
@@ -32,7 +34,47 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 					e.printStackTrace();
 				}
 				if(acceptedButtons.contains(keyBla)){
+					int tempX=PX;
+					int tempy=PY;
+					if(keyBla==81){
+						PX-=1;
+						PY-=1;
+					}
+					else if(keyBla==87){
+						PY-=1;
+					}
+					else if(keyBla==69){
+						PX+=1;
+						PY-=1;
+					}
+					else if(keyBla==65){
+						PX-=1;
+					}
+					else if(keyBla==83){
+						PX=PX;
+					}
+					else if(keyBla==68){
+						PX+=1;
+					}
+					else if(keyBla==90){
+						PX-=1;
+						PY+=1;
+					}
+					else if(keyBla==88){
+						PY+=1;
+					}
+					else if(keyBla==67){
+						PX+=1;
+						PY+=1;
+					}
+					
 					repaint();
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 
@@ -72,14 +114,17 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 			FencePositions[br][1]=freeerSpaces.get(RNGHelper)[1];
 			freeerSpaces.remove(RNGHelper);
 		}
-		
+		int RNGHelper1=RNGesus(freeerSpaces.size());
+		PX=freeerSpaces.get(RNGHelper1)[0];
+		PY=freeerSpaces.get(RNGHelper1)[1];
+		freeerSpaces.remove(RNGHelper1);
 		for(int br=0;br<12;br++){
-			System.out.println(MhoPositions[br][0]+", "+MhoPositions[br][1]);
+//			System.out.println(MhoPositions[br][0]+", "+MhoPositions[br][1]);
 			Matrix[MhoPositions[br][0]][MhoPositions[br][1]]=new Mho();
 		}
-		System.out.println();
+//		System.out.println();
 		for(int br=0;br<20;br++){
-			System.out.println(FencePositions[br][0]+", "+FencePositions[br][1]);
+//			System.out.println(FencePositions[br][0]+", "+FencePositions[br][1]);
 			Matrix[FencePositions[br][0]][FencePositions[br][1]]=new Fence();
 		}
 
@@ -93,7 +138,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		frame.getContentPane().add(canvas);
 		frame.pack();
 		frame.setVisible(true);
-		
+
 		/*
 		File gameField = new File("C:\\Users\\Ivo\\workspace\\Hivolts\\game-field.txt");
 		Iterator<String> fieldLinesIt = Files.lines(gameField.toPath()).iterator();
@@ -123,13 +168,13 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	public void paintAll(Graphics g){
 		for(int i = 0; i < 12; i++){
 			for(int n = 0; n < 12; n++){
-				System.out.println(n+"  "+i);
+//				System.out.println(n+"  "+i);
 				if(Matrix[i][n] instanceof Fence){
 					g.drawImage(Matrix[i][n].imageMaker(), getWidth()/12*i, getHeight()/12*n, getWidth()/12, getHeight()/12, null);
-					System.out.println("fence excecuted");
+//					System.out.println("fence excecuted");
 				}else if(Matrix[i][n] instanceof Mho){
 					g.drawImage(Matrix[i][n].imageMaker(), getWidth()/12*i, getHeight()/12*n, getWidth()/12, getHeight()/12, null);
-					System.out.println("mho excecuted");
+//					System.out.println("mho excecuted");
 				}
 			}
 		}
@@ -165,16 +210,20 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	}
 
 
-	int keyBla;
+	static int keyBla;
 	/** Paint Method
 	 * @param g - object of the graphics package
 	 */
 	public void paint(Graphics g) {
+		g.setColor(Color.BLACK);
 		this.addKeyListener(this);
 		paintGrid(g);
 		outerFence(g);
 		paintAll(g);
-		System.out.println(keyBla);
+		g.setColor(Color.GREEN);
+		g.fillOval(getWidth()/12*PX, getHeight()/12*PY, getWidth()/12, getHeight()/12);
+		System.out.println(PX+", "+PY);
+//		System.out.println(keyBla);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
