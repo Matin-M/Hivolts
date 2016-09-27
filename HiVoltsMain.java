@@ -71,9 +71,18 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 						int[] newPPos={tempX, tempY};
 						freeerSpaces.add(newPPos);
 						arrayPosition=RNGHelper;
-						System.out.println(PX + ", " + PY);
+//						System.out.println(PX + ", " + PY);
 						repaint();
 						Sleep(3000);
+						freeerSpaces.clear();
+						for(int br4=0;br4<12;br4++){
+							for(int br5=0;br5<12;br5++){
+								if(Matrix[br4][br5]==null){
+									int[] pos={br4,br5};
+									freeerSpaces.add(pos);
+								}
+							}
+						}
 						moveMho();
 						repaint();
 					}
@@ -86,7 +95,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 						int[] newPPos={tempX, tempY};
 						freeerSpaces.add(newPPos);
 						arrayPosition=RNGHelper;
-						System.out.println(PX + ", " + PY);
+//						System.out.println(PX + ", " + PY);
 						gameOver=true;
 						repaint();
 						return;
@@ -308,6 +317,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 			int[] newXY=MhoAlgorithm(newX1, newY1);
 			newX1=newXY[0];
 			newY1=newXY[1];
+			System.out.println(newX1 + ", " + newY1);
 			if(newX1==PX&&newY1==PY){
 				gameOver=true;
 			}
@@ -352,7 +362,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		paintAll(g);
 		g.setColor(Color.GREEN);
 		g.fillOval(getWidth()/12*PX, getHeight()/12*PY, getWidth()/12, getHeight()/12);
-		System.out.println(PX+", "+PY);
+//		System.out.println(PX+", "+PY);
 		if(gameOver){
 			GameOver(g);
 		}
