@@ -18,6 +18,8 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	 */
 	public static int PX=0;
 	public static int PY=0;
+	public static int arrayPosition = -1;
+	public static boolean gameOver=false;
 	private static final long serialVersionUID = 1L;
 	private Thread keyListener=new Thread(){
 
@@ -27,15 +29,11 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		public void run() {
 			// TODO Auto-generated method stub
 			while(true){
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Sleep(1);
 				if(acceptedButtons.contains(keyBla)){
+					int RNGHelper=RNGesus(freeerSpaces.size());
 					int tempX=PX;
-					int tempy=PY;
+					int tempY=PY;
 					if(keyBla==81){
 						PX-=1;
 						PY-=1;
@@ -51,7 +49,8 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 						PX-=1;
 					}
 					else if(keyBla==83){
-						PX=PX;
+						PX=freeerSpaces.get(RNGHelper)[0];
+						PY=freeerSpaces.get(RNGHelper)[1];
 					}
 					else if(keyBla==68){
 						PX+=1;
@@ -67,20 +66,43 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 						PX+=1;
 						PY+=1;
 					}
-					
-					repaint();
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					if(Matrix[PX][PY]==null){
+						freeerSpaces.remove(arrayPosition);
+						int[] newPPos={tempX, tempY};
+						freeerSpaces.add(newPPos);
+						arrayPosition=RNGHelper;
+						System.out.println(PX + ", " + PY);
+						repaint();
+						Sleep(3000);
+						moveMho();
+						repaint();
 					}
+					else if(Matrix[PX][PY] instanceof Fence){
+						PX=tempX;
+						PY=tempY;
+					}
+					else if(Matrix[PX][PY] instanceof Mho){
+						freeerSpaces.remove(arrayPosition);
+						int[] newPPos={tempX, tempY};
+						freeerSpaces.add(newPPos);
+						arrayPosition=RNGHelper;
+						System.out.println(PX + ", " + PY);
+						gameOver=true;
+						repaint();
+						return;
+					}
+					Sleep(500);
 				}
 			}
-
 		}
 	};
+	public static void Sleep(long ms){
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
 
+		}
+	}
 	public static ArrayList<int[]> freeSpacefinder(ArrayList<int[]> freeerSpaces){
 		for(int br=1;br<=10;br++){
 			for(int br1=1;br1<=10;br1++){
@@ -95,13 +117,14 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	public static int RNGesus(int randsize){
 		return (int)(1+Math.random()*(randsize-1));
 	}
-	
+	static ArrayList<int[]> freeerSpaces= new ArrayList<int[]>();
 	static Obstacles[][] Matrix = new Obstacles[12][12];
+	static int[][]MhoPositions;
+	static int[][]FencePositions;
 	public static void Randomiser(){
-		ArrayList<int[]> freeerSpaces= new ArrayList<int[]>();
 		freeerSpaces=freeSpacefinder(freeerSpaces);
-		int[][]MhoPositions=new int[12][2];
-		int[][]FencePositions=new int[20][2];
+		MhoPositions=new int[12][2];
+		FencePositions=new int[20][2];
 		for(int br=0;br<12;br++){
 			int RNGHelper=RNGesus(freeerSpaces.size());
 			MhoPositions[br][0]=freeerSpaces.get(RNGHelper)[0];
@@ -118,6 +141,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		PX=freeerSpaces.get(RNGHelper1)[0];
 		PY=freeerSpaces.get(RNGHelper1)[1];
 		freeerSpaces.remove(RNGHelper1);
+		arrayPosition=RNGHelper1;
 		for(int br=0;br<12;br++){
 //			System.out.println(MhoPositions[br][0]+", "+MhoPositions[br][1]);
 			Matrix[MhoPositions[br][0]][MhoPositions[br][1]]=new Mho();
@@ -133,11 +157,12 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	public static void main(String[] args) throws Exception {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-		Canvas canvas = new HiVoltsMain();
-		canvas.setSize(1000,1000);
-		frame.getContentPane().add(canvas);
+		HiVoltsMain canvasHiVolts = new HiVoltsMain();
+		canvasHiVolts.setSize(1000,1000);
+		frame.getContentPane().add(canvasHiVolts);
 		frame.pack();
 		frame.setVisible(true);
+		frame.addKeyListener(canvasHiVolts);
 
 		/*
 		File gameField = new File("C:\\Users\\Ivo\\workspace\\Hivolts\\game-field.txt");
@@ -209,7 +234,35 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		}
 	}
 
+	public static void moveMho(){
+		int RNGHelper2=RNGesus(MhoPositions.length);
+		int newX1=MhoPositions[RNGHelper2][0];
+		int newY1=MhoPositions[RNGHelper2][1];
+		newX1+=RNGesus(3)-2;
+		newY1+=RNGesus(3)-2;
+		if(Matrix[newX1][newY1]==null){
+			int br=0;
+			while(freeerSpaces.get(br)[0]!=newX1||freeerSpaces.get(br)[1]!=newY1){
+				br++;
+			}
+			int[] oldMPos=MhoPositions[RNGHelper2];
+			MhoPositions[RNGHelper2]=freeerSpaces.remove(br);
+			freeerSpaces.add(oldMPos);
+			Matrix[newX1][newY1]=Matrix[oldMPos[0]][oldMPos[1]];
+			Matrix[oldMPos[0]][oldMPos[1]]=null;
+//			System.out.println(PX + ", " + PY);
+		}
 
+	}
+	public static void GameOver(Graphics g){
+		Sleep(5000);
+		g.clearRect(0, 0, 1000, 1000);
+		g.setColor(Color.BLACK);
+		g.setFont(new Font("Ariel", Font.BOLD, 30));
+		g.drawString("GAME OVER", 200, 100);
+		Sleep(5000);
+		System.exit(0);
+	}
 	static int keyBla;
 	/** Paint Method
 	 * @param g - object of the graphics package
@@ -223,13 +276,10 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		g.setColor(Color.GREEN);
 		g.fillOval(getWidth()/12*PX, getHeight()/12*PY, getWidth()/12, getHeight()/12);
 		System.out.println(PX+", "+PY);
-//		System.out.println(keyBla);
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(gameOver){
+			GameOver(g);
 		}
+		Sleep(100);
 	}
 
 
