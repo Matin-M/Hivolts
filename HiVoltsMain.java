@@ -119,16 +119,15 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	}
 	static ArrayList<int[]> freeerSpaces= new ArrayList<int[]>();
 	static Obstacles[][] Matrix = new Obstacles[12][12];
-	static int[][]MhoPositions;
+	static ArrayList<int[]> MhoPositions= new ArrayList<int[]>();
 	static int[][]FencePositions;
 	public static void Randomiser(){
 		freeerSpaces=freeSpacefinder(freeerSpaces);
-		MhoPositions=new int[12][2];
+//		MhoPositions=new int[12][2];
 		FencePositions=new int[20][2];
 		for(int br=0;br<12;br++){
 			int RNGHelper=RNGesus(freeerSpaces.size());
-			MhoPositions[br][0]=freeerSpaces.get(RNGHelper)[0];
-			MhoPositions[br][1]=freeerSpaces.get(RNGHelper)[1];
+			MhoPositions.add(freeerSpaces.get(RNGHelper));
 			freeerSpaces.remove(RNGHelper);
 		}
 		for(int br=0;br<20;br++){
@@ -144,7 +143,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		arrayPosition=RNGHelper1;
 		for(int br=0;br<12;br++){
 //			System.out.println(MhoPositions[br][0]+", "+MhoPositions[br][1]);
-			Matrix[MhoPositions[br][0]][MhoPositions[br][1]]=new Mho();
+			Matrix[MhoPositions.get(br)[0]][MhoPositions.get(br)[1]]=new Mho();
 		}
 //		System.out.println();
 		for(int br=0;br<20;br++){
@@ -233,26 +232,103 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 			ymod += lineY; 
 		}
 	}
+	
+	public static int[] MhoAlgorithm(int mhoX, int mhoY) {
+		// This is the algorithm for the mho objects.
+		//Use mho array : MhoPositions and FencePositions
 
-	public static void moveMho(){
-		int RNGHelper2=RNGesus(MhoPositions.length);
-		int newX1=MhoPositions[RNGHelper2][0];
-		int newY1=MhoPositions[RNGHelper2][1];
-		newX1+=RNGesus(3)-2;
-		newY1+=RNGesus(3)-2;
-		if(Matrix[newX1][newY1]==null){
-			int br=0;
-			while(freeerSpaces.get(br)[0]!=newX1||freeerSpaces.get(br)[1]!=newY1){
-				br++;
+		if(PX == mhoX){
+			if(PY > mhoY){
+				mhoY++;
+			}else{
+				mhoY--;
 			}
-			int[] oldMPos=MhoPositions[RNGHelper2];
-			MhoPositions[RNGHelper2]=freeerSpaces.remove(br);
-			freeerSpaces.add(oldMPos);
-			Matrix[newX1][newY1]=Matrix[oldMPos[0]][oldMPos[1]];
-			Matrix[oldMPos[0]][oldMPos[1]]=null;
-//			System.out.println(PX + ", " + PY);
-		}
 
+
+		}else if(PY == mhoY){
+			if(PX > mhoX){
+				mhoX++;
+			}else{
+				mhoX--;
+			}
+
+
+		}else{
+			int xmod= mhoX - PX;
+			int ymod = mhoY - PY; 
+
+			if(xmod == ymod){
+				if( (xmod != Math.abs(xmod)) && (ymod != Math.abs(ymod)) ){
+					mhoX++;
+					mhoY++;
+				}else if( (xmod == Math.abs(xmod)) && (ymod != Math.abs(ymod)) ){
+					mhoX--;
+					mhoY++;
+				}else if( (xmod == Math.abs(xmod)) && (ymod == Math.abs(ymod)) ){
+					mhoX--;
+					mhoY--;
+				}else if( (xmod != Math.abs(xmod)) && (ymod == Math.abs(ymod)) ){
+					mhoX++;
+					mhoY--;
+				}
+
+
+			}else if(PX >= mhoY){
+				if(PX > mhoX){
+					mhoX++;
+				}else{
+					mhoX--;
+				}
+			}else if(PX <= mhoY){
+				if(PY > mhoY){
+					mhoY++;
+				}else{
+					mhoY--;
+				}
+			}
+			
+			
+			}
+		int[] array = {mhoX, mhoY};
+
+		return array;	
+
+
+		}
+	
+
+
+	
+	
+	public static void moveMho(){
+		for(int br1=0;br1<MhoPositions.size();br1++){
+			int RNGHelper2=br1;
+			int newX1=MhoPositions.get(RNGHelper2)[0];
+			int newY1=MhoPositions.get(RNGHelper2)[1];
+			int[] newXY=MhoAlgorithm(newX1, newY1);
+			newX1=newXY[0];
+			newY1=newXY[1];
+			if(newX1==PX&&newY1==PY){
+				gameOver=true;
+			}
+			else if(Matrix[newX1][newY1]==null){
+				int br=0;
+				while(freeerSpaces.get(br)[0]!=newX1||freeerSpaces.get(br)[1]!=newY1){
+					br++;
+				}
+				int[] oldMPos=MhoPositions.get(RNGHelper2);
+				MhoPositions.set(RNGHelper2, freeerSpaces.remove(br));
+				freeerSpaces.add(oldMPos);
+				Matrix[newX1][newY1]=Matrix[oldMPos[0]][oldMPos[1]];
+				Matrix[oldMPos[0]][oldMPos[1]]=null;
+//			System.out.println(PX + ", " + PY);
+			}
+			else if(Matrix[newX1][newY1] instanceof Fence){
+				freeerSpaces.add(MhoPositions.get(RNGHelper2));
+				Matrix[MhoPositions.get(RNGHelper2)[0]][MhoPositions.get(RNGHelper2)[1]]=null;
+				MhoPositions.remove(br1);
+			}
+		}
 	}
 	public static void GameOver(Graphics g){
 		Sleep(5000);
@@ -264,6 +340,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		System.exit(0);
 	}
 	static int keyBla;
+	
 	/** Paint Method
 	 * @param g - object of the graphics package
 	 */
