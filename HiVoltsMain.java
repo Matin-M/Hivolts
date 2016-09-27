@@ -24,7 +24,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	private Thread keyListener=new Thread(){
 
 		HashSet<Integer> acceptedButtons =
-				new HashSet<Integer>(Arrays.asList(81, 87, 69, 65, 83, 68, 90, 88, 67));
+				new HashSet<Integer>(Arrays.asList(81, 87, 69, 65, 83, 68, 90, 88, 67, 70));
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -66,7 +66,22 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 						PX+=1;
 						PY+=1;
 					}
-					if(Matrix[PX][PY]==null){
+					if(PX==tempX&&PY==tempY){
+						repaint();
+						Sleep(3000);
+						freeerSpaces.clear();
+						for(int br4=0;br4<12;br4++){
+							for(int br5=0;br5<12;br5++){
+								if(Matrix[br4][br5]==null){
+									int[] pos={br4,br5};
+									freeerSpaces.add(pos);
+								}
+							}
+						}
+						moveMho();
+						repaint();
+					}
+					else if(Matrix[PX][PY]==null){
 						freeerSpaces.remove(arrayPosition);
 						int[] newPPos={tempX, tempY};
 						freeerSpaces.add(newPPos);
