@@ -260,6 +260,8 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	public static int[] MhoAlgorithm(int mhoX, int mhoY) {
 		// This is the algorithm for the mho objects.
 		//Use mho array : MhoPositions and FencePositions
+		int xmod= mhoX - PX;
+		int ymod = mhoY - PY; 
 
 		if(PX == mhoX){
 			if(PY > mhoY){
@@ -278,8 +280,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 
 
 		}else{
-			int xmod= mhoX - PX;
-			int ymod = mhoY - PY; 
+
 
 			if(Math.abs(xmod) == Math.abs(ymod)){
 				if( (xmod != Math.abs(xmod)) && (ymod != Math.abs(ymod)) ){
@@ -296,15 +297,15 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 					mhoY--;
 				}
 
-
-			}else if(PX >= mhoY){
-				if(PX > mhoX){
+			
+			}else if(Math.abs(xmod) > Math.abs(ymod)){
+				if(xmod<0){
 					mhoX++;
 				}else{
 					mhoX--;
 				}
-			}else if(PX <= mhoY){
-				if(PY > mhoY){
+			}else if(Math.abs(ymod) > Math.abs(xmod)){
+				if(ymod<0){
 					mhoY++;
 				}else{
 					mhoY--;
@@ -319,7 +320,6 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 
 
 		}
-
 
 	
 	
