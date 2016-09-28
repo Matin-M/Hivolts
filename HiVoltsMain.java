@@ -281,7 +281,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 			int xmod= mhoX - PX;
 			int ymod = mhoY - PY; 
 
-			if(xmod == ymod){
+			if(Math.abs(xmod) == Math.abs(ymod)){
 				if( (xmod != Math.abs(xmod)) && (ymod != Math.abs(ymod)) ){
 					mhoX++;
 					mhoY++;
@@ -319,7 +319,6 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 
 
 		}
-	
 
 
 	
