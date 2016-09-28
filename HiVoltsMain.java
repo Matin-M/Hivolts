@@ -68,7 +68,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 					}
 					if(PX==tempX&&PY==tempY){
 						repaint();
-						Sleep(3000);
+						Sleep(1500);
 						freeerSpaces.clear();
 						for(int br4=0;br4<12;br4++){
 							for(int br5=0;br5<12;br5++){
@@ -88,7 +88,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 						arrayPosition=RNGHelper;
 //						System.out.println(PX + ", " + PY);
 						repaint();
-						Sleep(3000);
+//						Sleep(3000);
 						freeerSpaces.clear();
 						for(int br4=0;br4<12;br4++){
 							for(int br5=0;br5<12;br5++){
@@ -257,6 +257,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		}
 	}
 	
+	
 	public static int[] MhoAlgorithm(int mhoX, int mhoY) {
 		// This is the algorithm for the mho objects.
 		//Use mho array : MhoPositions and FencePositions
@@ -320,6 +321,8 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 
 
 		}
+	
+
 
 	
 	
@@ -351,6 +354,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 				freeerSpaces.add(MhoPositions.get(RNGHelper2));
 				Matrix[MhoPositions.get(RNGHelper2)[0]][MhoPositions.get(RNGHelper2)[1]]=null;
 				MhoPositions.remove(br1);
+				br1--;
 			}
 		}
 	}
