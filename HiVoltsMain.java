@@ -20,6 +20,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	 */
 	public static int PX=0;
 	public static int PY=0;
+	public Graphics g;
 	public static int arrayPosition = -1;
 	public static boolean gameOver=false;
 	private static final long serialVersionUID = 1L;
@@ -39,34 +40,43 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 					if(keyBla==81){
 						PX-=1;
 						PY-=1;
+						fenceCheck();
 					}
 					else if(keyBla==87){
 						PY-=1;
+						fenceCheck();
 					}
 					else if(keyBla==69){
 						PX+=1;
 						PY-=1;
+						fenceCheck();
 					}
 					else if(keyBla==65){
 						PX-=1;
+						fenceCheck();
 					}
 					else if(keyBla==83){
 						PX=freeerSpaces.get(RNGHelper)[0];
 						PY=freeerSpaces.get(RNGHelper)[1];
+						fenceCheck();
 					}
 					else if(keyBla==68){
 						PX+=1;
+						fenceCheck();
 					}
 					else if(keyBla==90){
 						PX-=1;
 						PY+=1;
+						fenceCheck();
 					}
 					else if(keyBla==88){
 						PY+=1;
+						fenceCheck();
 					}
 					else if(keyBla==67){
 						PX+=1;
 						PY+=1;
+						fenceCheck();
 					}
 					if(PX==tempX&&PY==tempY){
 						repaint();
@@ -80,6 +90,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 								}
 							}
 						}
+						
 						moveMho();
 						repaint();
 					}
@@ -408,21 +419,35 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	}
 	static int keyBla;
 	
+	/**
+	 * If all mhos are gone, this page is displayed
+	 * @param g
+	 */
 	public static void Win(Graphics g){
 		Sleep(5000);
 		g.clearRect(0, 0, 1000, 1000);
-		g.setColor(Color.BLACK);
+		g.setColor(Color.blue);
 		g.setFont(new Font("Ariel", Font.BOLD, 30));
 		g.drawString("YOU WIN! CONGRADULATIONS!", 300, 300);
 		Sleep(5000);
 		System.exit(0);
 	}
 	
+	public void fenceCheck(){
+		//boolean trash = false;
+		if(Matrix[PX][PY] instanceof Fence){
+			Sleep(5000);
+			Sleep(5000);
+			System.exit(0);
+		}
+		System.out.println("FENCE CHECK INVOKED:  " + (Matrix[PX][PY] instanceof Fence));
+	}
 	
 	/** Paint Method
 	 * @param g - object of the graphics package
 	 */
 	public void paint(Graphics g) {
+		this.g = g;
 		g.setColor(Color.BLACK);
 		this.addKeyListener(this);
 		//paintGrid(g);
@@ -433,6 +458,8 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		
 		g.drawImage(imager("player.png"), getWidth()/12*PX, getHeight()/12*PY, getWidth()/12, getHeight()/12, null);
 //		System.out.println(PX+", "+PY);
+		
+		//fenceCheck();
 		
 		if(MhoPositions.size() == 0){
 			Win(g);
