@@ -40,43 +40,34 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 					if(keyBla==81){
 						PX-=1;
 						PY-=1;
-						fenceCheck();
 					}
 					else if(keyBla==87){
 						PY-=1;
-						fenceCheck();
 					}
 					else if(keyBla==69){
 						PX+=1;
 						PY-=1;
-						fenceCheck();
 					}
 					else if(keyBla==65){
 						PX-=1;
-						fenceCheck();
 					}
 					else if(keyBla==83){
 						PX=freeerSpaces.get(RNGHelper)[0];
 						PY=freeerSpaces.get(RNGHelper)[1];
-						fenceCheck();
 					}
 					else if(keyBla==68){
 						PX+=1;
-						fenceCheck();
 					}
 					else if(keyBla==90){
 						PX-=1;
 						PY+=1;
-						fenceCheck();
 					}
 					else if(keyBla==88){
 						PY+=1;
-						fenceCheck();
 					}
 					else if(keyBla==67){
 						PX+=1;
 						PY+=1;
-						fenceCheck();
 					}
 					if(PX==tempX&&PY==tempY){
 						repaint();
@@ -115,8 +106,15 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 						repaint();
 					}
 					else if(Matrix[PX][PY] instanceof Fence){
-						PX=tempX;
-						PY=tempY;
+						freeerSpaces.remove(arrayPosition);
+						int[] newPPos={tempX, tempY};
+						freeerSpaces.add(newPPos);
+						arrayPosition=RNGHelper;
+//						System.out.println(PX + ", " + PY);
+						gameOver=true;
+						repaint();
+						return;
+
 					}
 					else if(Matrix[PX][PY] instanceof Mho){
 						freeerSpaces.remove(arrayPosition);
@@ -432,20 +430,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		Sleep(5000);
 		System.exit(0);
 	}
-	
-	public void fenceCheck(){
-		//boolean trash = false;
-		if(Matrix[PX][PY] instanceof Fence){
-			gameOver=true;
-			/*
-			Sleep(5000);
-			Sleep(5000);
-			System.exit(0);
-			*/
-		}
-		System.out.println("FENCE CHECK INVOKED:  " + (Matrix[PX][PY] instanceof Fence));
-	}
-	
+		
 	/** Paint Method
 	 * @param g - object of the graphics package
 	 */
