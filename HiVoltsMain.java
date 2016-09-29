@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +11,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 public class HiVoltsMain extends Canvas implements KeyListener {
@@ -29,7 +31,7 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		public void run() {
 			// TODO Auto-generated method stub
 			while(true){
-				Sleep(1);
+				Sleep(30);
 				if(acceptedButtons.contains(keyBla)){
 					int RNGHelper=RNGesus(freeerSpaces.size());
 					int tempX=PX;
@@ -213,6 +215,9 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		setBackground(Color.white);
 		repaint();
 	}
+	/**
+	 * Paints all elements in the game
+	 */
 	public void paintAll(Graphics g){
 		for(int i = 0; i < 12; i++){
 			for(int n = 0; n < 12; n++){
@@ -228,7 +233,10 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		}
 		
 	}
-	
+	/**
+	 * Assigns fences
+	 * @param g
+	 */
 	public static void outerFence(Graphics g){
 		Fence outer = new Fence();
 		for(int i = 0; i <= 11; i++){
@@ -239,7 +247,10 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		}
 		
 	}
-	
+	/**
+	 * A grid to help visualize the spots
+	 * @param g
+	 */
 	public void paintGrid(Graphics g){
 		//Paint a grid
 		int lineX = getWidth()/12;
@@ -257,7 +268,12 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 		}
 	}
 	
-	
+	/**
+	 * Calculates the position of the mhos. mho AI
+	 * @param mhoX
+	 * @param mhoY
+	 * @return
+	 */
 	public static int[] MhoAlgorithm(int mhoX, int mhoY) {
 		// This is the algorithm for the mho objects.
 		//Use mho array : MhoPositions and FencePositions
@@ -325,7 +341,9 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 
 
 	
-	
+	/**
+	 * Moves the mhos to the correct position
+	 */
 	public static void moveMho(){
 		for(int br1=0;br1<MhoPositions.size();br1++){
 			int RNGHelper2=br1;
@@ -358,16 +376,48 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 			}
 		}
 	}
+	
+	public BufferedImage imager(String filename){
+		//Name of the file in workspace
+		File image = new File(filename);
+		String path = image.getAbsolutePath();
+		BufferedImage img = null;
+		
+		 try {
+             img = ImageIO.read(new File(path));
+         } catch (IOException e) {
+        	 System.out.println("Oops! There was an error: " + e);
+         }
+		 
+		 return img; 
+	}
+	
+	
+	/**
+	 * Game over screen
+	 * @param g
+	 */
 	public static void GameOver(Graphics g){
 		Sleep(5000);
 		g.clearRect(0, 0, 1000, 1000);
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("Ariel", Font.BOLD, 30));
-		g.drawString("GAME OVER", 200, 100);
+		g.drawString("GAME OVER", 400, 400);
 		Sleep(5000);
 		System.exit(0);
 	}
 	static int keyBla;
+	
+	public static void Win(Graphics g){
+		Sleep(5000);
+		g.clearRect(0, 0, 1000, 1000);
+		g.setColor(Color.BLACK);
+		g.setFont(new Font("Ariel", Font.BOLD, 30));
+		g.drawString("YOU WIN! CONGRADULATIONS!", 300, 300);
+		Sleep(5000);
+		System.exit(0);
+	}
+	
 	
 	/** Paint Method
 	 * @param g - object of the graphics package
@@ -375,12 +425,19 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	public void paint(Graphics g) {
 		g.setColor(Color.BLACK);
 		this.addKeyListener(this);
-		paintGrid(g);
+		//paintGrid(g);
 		outerFence(g);
 		paintAll(g);
 		g.setColor(Color.GREEN);
-		g.fillOval(getWidth()/12*PX, getHeight()/12*PY, getWidth()/12, getHeight()/12);
+		//g.fillOval(getWidth()/12*PX, getHeight()/12*PY, getWidth()/12, getHeight()/12);
+		
+		g.drawImage(imager("player.png"), getWidth()/12*PX, getHeight()/12*PY, getWidth()/12, getHeight()/12, null);
 //		System.out.println(PX+", "+PY);
+		
+		if(MhoPositions.size() == 0){
+			Win(g);
+		}
+		
 		if(gameOver){
 			GameOver(g);
 		}
