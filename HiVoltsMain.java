@@ -436,9 +436,12 @@ public class HiVoltsMain extends Canvas implements KeyListener {
 	public void fenceCheck(){
 		//boolean trash = false;
 		if(Matrix[PX][PY] instanceof Fence){
+			gameOver=true;
+			/*
 			Sleep(5000);
 			Sleep(5000);
 			System.exit(0);
+			*/
 		}
 		System.out.println("FENCE CHECK INVOKED:  " + (Matrix[PX][PY] instanceof Fence));
 	}
